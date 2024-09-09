@@ -1,0 +1,22 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Marriage {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  girlName    String
+  girlDob     String
+  manName     String
+  manDob      String
+  firstDowry  String?
+  lastDowry   String?
+  notes       String?
+  firstWitness String
+  secondWitness String
+  userId      String   // User's ID from your auth system
+}

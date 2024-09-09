@@ -1,4 +1,6 @@
 import express from "express";
+const { PrismaClient } = require('@prisma/client');
+const bodyParser = require('body-parser');
 
 const app = express();
 const port = 3000; //add your port here
@@ -17,7 +19,7 @@ app.listen(port, () => {
 app.post("/create-payment-intent", async (req, res) => {
   try {
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: 1099, //lowest denomination of particular currency
+      amount: 10000, 
       currency: "usd",
     });
 
@@ -29,5 +31,37 @@ app.post("/create-payment-intent", async (req, res) => {
   } catch (e) {
     console.log(e.message);
     res.json({ error: e.message });
+  }
+});
+
+
+
+const prisma = new PrismaClient();
+
+app.use(bodyParser.json());
+
+
+app.post('/saveMarriage', async (req, res) => {
+  const { girlName, girlDob, manName, manDob, firstDowry, lastDowry, notes, firstWitness, secondWitness, userId } = req.body;
+
+  try {
+    const marriage = await prisma.marriage.create({
+      data: {
+        girlName,
+        girlDob,
+        manName,
+        manDob,
+        firstDowry,
+        lastDowry,
+        notes,
+        firstWitness,
+        secondWitness,
+        userId,
+      },
+    });
+    res.status(200).json({ success: true, marriage });
+  } catch (error) {
+    console.error("Error saving marriage:", error);
+    res.status(500).json({ success: false, error: "Failed to save marriage" });
   }
 });
