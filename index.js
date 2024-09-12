@@ -1,13 +1,6 @@
 import express from "express";
 import { PrismaClient } from '@prisma/client';
 import bodyParser from 'body-parser';
-import { Document, Packer, Paragraph, TextRun } from "docx"; // Updated import
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = 3000; //add your port here
@@ -48,20 +41,8 @@ const prisma = new PrismaClient();
 app.use(bodyParser.json());
 
 
-
-app.post("/saveMarriage", async (req, res) => {
-  const {
-    girlName,
-    girlDob,
-    manName,
-    manDob,
-    firstDowry,
-    lastDowry,
-    notes,
-    firstWitness,
-    secondWitness,
-    userId,
-  } = req.body;
+app.post('/saveMarriage', async (req, res) => {
+  const { girlName, girlDob, manName, manDob, firstDowry, lastDowry, notes, firstWitness, secondWitness, userId } = req.body;
 
   try {
     const marriage = await prisma.marriage.create({
@@ -78,46 +59,7 @@ app.post("/saveMarriage", async (req, res) => {
         userId,
       },
     });
-
-    // Generate Word document with the details
-    const doc = new Document({
-      sections: [
-        {
-          properties: {},
-          children: [
-            new Paragraph({
-              children: [
-                new TextRun({ text: `Marriage Details`, bold: true, size: 32 }),
-                new TextRun("\n"),
-                new TextRun(`Girl Name: ${girlName}`),
-                new TextRun("\n"),
-                new TextRun(`Girl Date of Birth: ${girlDob}`),
-                new TextRun("\n"),
-                new TextRun(`Man Name: ${manName}`),
-                new TextRun("\n"),
-                new TextRun(`Man Date of Birth: ${manDob}`),
-                new TextRun("\n"),
-                new TextRun(`First Dowry: ${firstDowry}`),
-                new TextRun("\n"),
-                new TextRun(`Last Dowry: ${lastDowry}`),
-                new TextRun("\n"),
-                new TextRun(`Notes: ${notes}`),
-                new TextRun("\n"),
-                new TextRun(`First Witness: ${firstWitness}`),
-                new TextRun("\n"),
-                new TextRun(`Second Witness: ${secondWitness}`),
-              ],
-            }),
-          ],
-        },
-      ],
-    });
-
-    const buffer = await Packer.toBuffer(doc);
-    const filePath = path.join(__dirname, "marriage-details.docx");
-    fs.writeFileSync(filePath, buffer);
-
-    res.status(200).json({ success: true, marriage, filePath });
+    res.status(200).json({ success: true, marriage });
   } catch (error) {
     console.error("Error saving marriage:", error);
     res.status(500).json({ success: false, error: "Failed to save marriage" });
