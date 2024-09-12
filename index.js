@@ -59,7 +59,46 @@ app.post('/saveMarriage', async (req, res) => {
         userId,
       },
     });
-    res.status(200).json({ success: true, marriage });
+
+    // Generate Word document with the details
+    const { Document, Packer, Paragraph, TextRun } = docx;
+
+    const doc = new Document({
+      sections: [{
+        properties: {},
+        children: [
+          new Paragraph({
+            children: [
+              new TextRun({ text: `Marriage Details`, bold: true, size: 32 }),
+              new TextRun("\n"),
+              new TextRun(`Girl Name: ${girlName}`),
+              new TextRun("\n"),
+              new TextRun(`Girl Date of Birth: ${girlDob}`),
+              new TextRun("\n"),
+              new TextRun(`Man Name: ${manName}`),
+              new TextRun("\n"),
+              new TextRun(`Man Date of Birth: ${manDob}`),
+              new TextRun("\n"),
+              new TextRun(`First Dowry: ${firstDowry}`),
+              new TextRun("\n"),
+              new TextRun(`Last Dowry: ${lastDowry}`),
+              new TextRun("\n"),
+              new TextRun(`Notes: ${notes}`),
+              new TextRun("\n"),
+              new TextRun(`First Witness: ${firstWitness}`),
+              new TextRun("\n"),
+              new TextRun(`Second Witness: ${secondWitness}`),
+            ],
+          }),
+        ],
+      }],
+    });
+
+    const buffer = await Packer.toBuffer(doc);
+    const filePath = path.join(__dirname, 'marriage-details.docx');
+    fs.writeFileSync(filePath, buffer);
+
+    res.status(200).json({ success: true, marriage, filePath });
   } catch (error) {
     console.error("Error saving marriage:", error);
     res.status(500).json({ success: false, error: "Failed to save marriage" });
