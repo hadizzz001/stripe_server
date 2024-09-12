@@ -65,3 +65,27 @@ app.post('/saveMarriage', async (req, res) => {
     res.status(500).json({ success: false, error: "Failed to save marriage" });
   }
 });
+
+
+
+app.get('/getMarriages', async (req, res) => {
+  const { userId } = req.query; // Get userId from query parameters
+
+  try {
+    // Retrieve all marriages associated with the given userId
+    const marriages = await prisma.marriage.findMany({
+      where: {
+        userId: userId, // Filter by userId
+      },
+    });
+
+    if (marriages.length === 0) {
+      return res.status(404).json({ success: false, message: "No marriages found for this user" });
+    }
+
+    res.status(200).json({ success: true, marriages });
+  } catch (error) {
+    console.error("Error fetching marriages:", error);
+    res.status(500).json({ success: false, error: "Failed to fetch marriages" });
+  }
+});
