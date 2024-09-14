@@ -8,15 +8,34 @@ generator client {
 }
 
 model Marriage {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  girlName    String
-  girlDob     String
-  manName     String
-  manDob      String
-  firstDowry  String?
-  lastDowry   String?
-  notes       String?
-  firstWitness String
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  girlName      String
+  girlDob       String
+  manName       String
+  manDob        String
+  firstDowry    String?
+  lastDowry     String?
+  notes         String?
+  firstWitness  String
   secondWitness String
-  userId      String   // User's ID from your auth system
+  date          DateTime @default(now())
+  userId        String  
+}
+
+
+model Divorce {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  girlName      String
+  girlDob       String
+  girlRN       String
+  manName       String
+  manDob        String
+  manRN        String
+  notes         String?
+  firstWitness  String
+  firstWitnessRN  String
+  secondWitness String
+  secondWitnessRN String
+  date          DateTime @default(now())
+  userId        String  
 }
