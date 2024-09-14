@@ -18,7 +18,7 @@ model Marriage {
   notes         String?
   firstWitness  String
   secondWitness String
-  date          DateTime @default(now())
+  date          String
   userId        String  
 }
 
@@ -36,6 +36,6 @@ model Divorce {
   firstWitnessRN  String
   secondWitness String
   secondWitnessRN String
-  date          DateTime @default(now())
+  date          String
   userId        String  
 }

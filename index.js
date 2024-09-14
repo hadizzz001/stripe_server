@@ -45,7 +45,7 @@ app.post('/saveMarriage', async (req, res) => {
   const { girlName, girlDob, manName, manDob, firstDowry, lastDowry, notes, firstWitness, secondWitness, userId } = req.body;
   
   // Set current date if not provided
-  const currentDate = new Date();
+  const currentDate = new Date().toISOString();
 
   try {
     const marriage = await prisma.marriage.create({
@@ -100,7 +100,7 @@ app.get('/getMarriages', async (req, res) => {
 
 app.post('/saveDivorce', async (req, res) => {
   const { girlName, girlDob, girlRN, manName, manDob, manRN, notes, firstWitness, firstWitnessRN, secondWitness, secondWitnessRN, date, userId } = req.body;
-  const currentDate = new Date();
+  const currentDate = new Date().toISOString();
   try {
     const divorce = await prisma.divorce.create({
       data: {
