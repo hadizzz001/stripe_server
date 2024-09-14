@@ -42,7 +42,10 @@ app.use(bodyParser.json());
 
 
 app.post('/saveMarriage', async (req, res) => {
-  const { girlName, girlDob, manName, manDob, firstDowry, lastDowry, notes, firstWitness, secondWitness, date, userId } = req.body;
+  const { girlName, girlDob, manName, manDob, firstDowry, lastDowry, notes, firstWitness, secondWitness, userId } = req.body;
+  
+  // Set current date if not provided
+  const currentDate = new Date();
 
   try {
     const marriage = await prisma.marriage.create({
@@ -56,7 +59,7 @@ app.post('/saveMarriage', async (req, res) => {
         notes,
         firstWitness,
         secondWitness,
-        date,
+        date: currentDate,  
         userId,
       },
     });
@@ -66,6 +69,7 @@ app.post('/saveMarriage', async (req, res) => {
     res.status(500).json({ success: false, error: "Failed to save marriage" });
   }
 });
+
 
 
 
@@ -96,11 +100,11 @@ app.get('/getMarriages', async (req, res) => {
 
 app.post('/saveDivorce', async (req, res) => {
   const { girlName, girlDob, girlRN, manName, manDob, manRN, notes, firstWitness, firstWitnessRN, secondWitness, secondWitnessRN, date, userId } = req.body;
-
+  const currentDate = new Date();
   try {
     const divorce = await prisma.divorce.create({
       data: {
-        girlName, girlDob, girlRN, manName, manDob, manRN, notes, firstWitness, firstWitnessRN, secondWitness, secondWitnessRN, date, userId
+        girlName, girlDob, girlRN, manName, manDob, manRN, notes, firstWitness, firstWitnessRN, secondWitness, secondWitnessRN, date: currentDate, userId
       },
     });
     res.status(200).json({ success: true, divorce });
