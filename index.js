@@ -140,3 +140,43 @@ app.get('/getDivorces', async (req, res) => {
     res.status(500).json({ success: false, error: "Failed to fetch divorce" });
   }
 });
+
+
+
+app.post('/saveConsult', async (req, res) => {
+  const { consultData, consultResult, userId } = req.body; 
+  try {
+    const consult = await prisma.consult.create({
+      data: {
+        consultData, consultResult, userId
+      },
+    });
+    res.status(200).json({ success: true, consult });
+  } catch (error) {
+    console.error("Error saving consult:", error);
+    res.status(500).json({ success: false, error: "Failed to save consult" });
+  }
+});
+
+
+
+app.get('/getConsults', async (req, res) => {
+  const { userId } = req.query;  
+
+  try { 
+    const consult = await prisma.consult.findMany({
+      where: {
+        userId: userId,  
+      },
+    });
+
+    if (consult.length === 0) {
+      return res.status(404).json({ success: false, message: "No consult found for this user" });
+    }
+
+    res.status(200).json({ success: true, consult });
+  } catch (error) {
+    console.error("Error fetching consult:", error);
+    res.status(500).json({ success: false, error: "Failed to fetch consult" });
+  }
+});

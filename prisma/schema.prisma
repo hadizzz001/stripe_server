@@ -8,7 +8,7 @@ generator client {
 }
 
 model Marriage {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
   girlName      String
   girlDob       String
   manName       String
@@ -19,23 +19,29 @@ model Marriage {
   firstWitness  String
   secondWitness String
   date          String
-  userId        String  
+  userId        String
 }
 
-
 model Divorce {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  girlName      String
-  girlDob       String
-  girlRN       String
-  manName       String
-  manDob        String
-  manRN        String
-  notes         String?
-  firstWitness  String
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  girlName        String
+  girlDob         String
+  girlRN          String
+  manName         String
+  manDob          String
+  manRN           String
+  notes           String?
+  firstWitness    String
   firstWitnessRN  String
-  secondWitness String
+  secondWitness   String
   secondWitnessRN String
-  date          String
-  userId        String  
+  date            String
+  userId          String
+}
+
+model Consult {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  consultData   String
+  consultResult String?
+  userId        String
 }
