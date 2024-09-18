@@ -43,5 +43,6 @@ model Consult {
   id            String @id @default(auto()) @map("_id") @db.ObjectId
   consultData   String
   consultResult String?
+  status String
   userId        String
 }

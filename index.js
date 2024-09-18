@@ -148,7 +148,7 @@ app.post('/saveConsult', async (req, res) => {
   try {
     const consult = await prisma.consult.create({
       data: {
-        consultData, consultResult, userId
+        consultData, consultResult, status:'Pending', userId
       },
     });
     res.status(200).json({ success: true, consult });
